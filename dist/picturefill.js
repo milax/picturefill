@@ -58,7 +58,18 @@ window.matchMedia || (window.matchMedia = function() {
 
 	// If picture is supported, well, that's awesome. Let's get outta here...
 	if ( w.HTMLPictureElement ) {
-		w.picturefill = function() { };
+		var picturefill = function() { };
+		/* expose picturefill */
+		if ( typeof module === "object" && typeof module.exports === "object" ) {
+			// CommonJS, just export
+			module.exports = picturefill;
+		} else if ( typeof define === "function" && define.amd ) {
+			// AMD support
+			define('picturefill', function() { return picturefill; } );
+		} else if ( typeof w === "object" ) {
+			// If no AMD and we are in the browser, attach to window
+			w.picturefill = picturefill;
+		}
 		return;
 	}
 
@@ -650,7 +661,7 @@ window.matchMedia || (window.matchMedia = function() {
 		module.exports = picturefill;
 	} else if ( typeof define === "function" && define.amd ) {
 		// AMD support
-		define( function() { return picturefill; } );
+		define('picturefill', function() { return picturefill; } );
 	} else if ( typeof w === "object" ) {
 		// If no AMD and we are in the browser, attach to window
 		w.picturefill = picturefill;
