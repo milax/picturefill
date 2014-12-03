@@ -109,7 +109,17 @@ window.matchMedia || (window.matchMedia = function() {
 	 */
 
 	pf.matchesMedia = function( media ) {
-		return w.matchMedia && w.matchMedia( media ).matches;
+		if(w.matchMedia) {
+			if(w.matchMedia( media ) == null) {
+				return false;
+			}
+			else {
+				return w.matchMedia( media ).matches;
+			}
+		}
+		else {
+			return false;
+		}
 	};
 
 	// Shortcut method for `devicePixelRatio` ( for easy overriding in tests )
